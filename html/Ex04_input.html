@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" maxlength="10" placeholder="아이디를 입력해주세요." readonly> <!--placeholder 출력 메세지 --> 
+    <button>중복 확인</button>
+    <br>
+
+    <input type="text" placeholder="비밀번호를 입력해주세요."> 
+    <hr>
+
+    <!--
+        form 태그는 입력받은 값(input)을 특정 서버로 데이터를 전달시키는 역할
+    -->
+    <form action="#">
+        <input type="email" placeholder="이메일을 입력해주세요." required> <!-- required 필수 입력-->
+        <button type="submit">이메일 등록</button> 
+    </form>
+    <hr>
+
+    <form action="#">
+        <input type="checkbox" id = "apple"> <!--apple은 변수명같은것-->
+        <label for="apple">사과</label>
+
+        <input type="checkbox" id = "banana">
+        <label for="banana">바나나</label>
+    </form>
+    <hr>
+
+    <form action="#">
+        <input type="radio" id = "apple" name = "fruit"> <!--apple은 변수명같은것-->
+        <label for="apple">사과</label>
+
+        <input type="radio" id = "banana" name = "fruit">
+        <label for="banana">바나나</label>
+    </form>
+
+    <input type="number">
+    <input type="hidden">
+    <input type="date">
+
+</body>
+</html>
