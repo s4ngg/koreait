@@ -1,0 +1,3 @@
+function externalBtn() {
+    alert("external!")
+}

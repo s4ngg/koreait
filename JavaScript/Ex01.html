@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- inline 방식 / html안에 작성하는 방식 -->
+    <button onclick="alert('Hello, World!')">버튼</button>
+    <br>
+
+    <!-- internal 방식 / 메서드 방식이라 생각하면 편함--> 
+    <button onclick="btnClick()">버튼</button>
+    <br>
+
+    <!-- External 방식-->
+    <button onclick="externalBtn()">버튼</button>
+    <script src="./Ex01.js"></script>
+    <br>
+
+    <script>
+        function btnClick() {
+            alert("클릭됨!")
+        }
+    </script>
+</body>
+</html>
