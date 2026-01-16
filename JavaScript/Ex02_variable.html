@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script> // 자료형 대신 그냥 선언해서 사용 
+        var a = "var 변수";
+        let b = "let 변수";
+        const c = "const 변수";
+
+        console.log(a);
+        console.log(b);
+        console.log(c);
+
+        // 차이점 - 1 : 중복 선언
+        var a = 10; // 중복 선언 o
+        // let b= 5; 중복 선언 x
+        // const c = 2; 중복 선언 x
+
+        // 차이점 -2 : 외부 변수 참조
+        function example (){ //메서드와 동일 /
+            var a_2 = 10;
+            let b_2 = 20;
+            const c_2 = 30;
+
+            if (true) {
+                var a_2 = 100;
+                let b_2 = 200; // let, const는 가장 가까운 스코프의 값을 사용
+                const c_2 = 300;
+                console.log(a_2, b_2, c_2);
+            }
+
+            console.log(a_2, b_2, c_2); //var는 위에서 받은 vaule 그대로 사용 / let const는 중복이 안돼서 스코프별로 다른 값 가능
+        }
+        example()
+
+        // 차이점 - 3
+        console.log(a_3); // var a_3를 아직 선언하기 전인데 자동으로 선언해줘서 undefined로 출려됨. -> 호이스팅이라고 함 
+        var a_3 = "a_3 변수";
+        console.log(a_3);
+
+        // console.log(b_3); // let이랑 const는 호이스팅을 지원하지 않아서 선언하지 않으면 오류가 발생함
+        // let b_3 = "let 변수"; 
+        // console.log(b_3);
+    </script>
+
+    <script>
+        let age = 19; // number type
+        let name = "철수"; // string type
+        let flag = true // boolean type
+        let check; // undefined
+        let hobby = ["잠자기", "먹기"]; // object type
+        let memberInfo = { // object type
+            name : "짱구",
+            age : 5,
+            flag : false
+        }
+        let nameSymbol = Symbol("name") // symbol type / symbol은 고유성질을 가져서 동일한 key를 가져도 사용이 가능함. 개별취급됨
+        let bigint = BigInt("1234512321313123213123213123123123"); // Bigint type
+        
+        let uniqueKey = Symbol("name");
+        console.log(nameSymbol == uniqueKey);
+
+
+        console.log(age);
+        console.log(name);
+        console.log(flag);
+        console.log(check);
+        console.log(hobby);
+        console.log(memberInfo);
+        console.log(nameSymbol);
+        console.log(bigint);
+
+
+        let num1 = 9007199254740991;
+        console.log(num1);
+        console.log(num1+1);
+        console.log(num1+2);
+        console.log(num1+3);
+    
+        let num3 = BigInt(9007199254740991);
+        console.log(num3 + 1n);
+        console.log(num3 + 2n);
+        console.log(num3 + 3n);
+
+        
+    </script>
+</body>
+</html>
