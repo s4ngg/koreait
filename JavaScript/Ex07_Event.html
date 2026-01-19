@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id = "handler-btn" onclick="handlerEvent()">이벤트 핸들러</button>
+    <script>
+        function handlerEvent() {
+            alert("이벤트 핸들러가 실행되었습니다.");
+        }
+    </script>
+
+    <hr>
+    <button id = "listener-btn">이벤트 리스너</button>
+    <script>
+        let btn = document.getElementById("listener-btn"); // id에서 바로 함수 등록하지 않고 따로 사용. 잘 쓰이지 않음
+
+        btn.addEventListener('click', function(){
+            alert("이벤트 리스너")
+        })
+    </script>
+    
+    <hr>
+    <button id = "my-btn" onclick="changeText()">버튼을 클릭해주세요</button>
+    
+    <script>
+        let myBtn = document.getElementById("my-btn");
+        let is_click = false;
+        
+        function changeText(){
+            if (!is_click) {
+                myBtn.textContent = "클릭 되었습니다.";
+                //is_click = true;
+            } else {
+                myBtn.textContent = "취소 되었습니다.";
+                //is_click = false;
+            }
+            is_click = !is_click; // 위에 주석처리한 코드들을 1줄로 줄임. 
+        }
+    </script>
+
+    <hr>
+    <button id = "mouse-event-btn">클릭</button>
+    <p id = "msg"></p>
+    <script>
+        const mouseEventBtn = document.getElementById("mouse-event-btn"); // const는 값을 넣으면 안바꾸겠다는 의미로 많이 사용
+        const msg = document.getElementById("msg");
+
+        mouseEventBtn.addEventListener('contextmenu', function(event){
+            event.preventDefault(); // 동작을 막는 메서드
+            msg.textContent = "마우스가 오른쪽 버튼이 클릭되었습니다.";
+        })
+        // mouseEventBtn.addEventListener('dblclick', function(){
+        //     msg.textContent = "마우스가 더블클릭 되었습니다.";
+        // })
+    </script>
+
+    <hr>
+    <input type="text" id = "keyboard-event">
+    <script> 
+        const keyboardEvent = document.getElementById("keyboard-event");
+        // keyboardEvent.addEventListener('keydown', function(event){
+        //     console.log("키가 눌렸습니다. 눌린 키보드 : " + event.keyCode);
+        // })
+
+        // keyboardEvent.addEventListener('keyup', function(event){
+        //     console.log("키가 눌렸습니다. 눌린 키보드 : " + event.keyCode);
+        // })
+
+        keyboardEvent.addEventListener('input', function(event){
+            console.log("키가 눌렸습니다. 눌린 키보드 : " + event.keyCode);
+        })
+        </script>
+</body>
+</html>
