@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Q1. 사용자로부터 이름을 입력받고 콘솔 로그에 이름을 출력하세요. -->
+    <input type = "text" id = "q1-name"> <button onclick="q1()">제출</button>
+    <script>
+        function q1() {
+            let q1 = document.getElementById("q1-name")
+            console.log(q1.value)
+
+        }
+    </script>
+    <!-- Q2. 사용자로부터 숫자 3개를 입력받아 합을 계산하여 div 태그에 텍스트로 출력하세요. -->
+    <hr>
+    <input type = "text" id = "q2-num-1"><br>
+    <input type = "text" id = "q2-num-2"><br>
+    <input type = "text" id = "q2-num-3"><br>
+    <div id = "msg">입력된 값의 합을 여기에 출력하세요.</div> 
+    <button onclick="q2()">제출</button>
+
+    <script>
+        // q2 함수 작성
+        // - input 3개의 요소를 각각 가져오기
+        // - 가져온 요소들의 value를 더하기
+        // - 더한 값을 div 요소의 텍스트 노드에 추가 (textContent)
+        function q2() {
+            let q2_num_1 = document.getElementById("q2-num-1").value // Id 호출후 .value로 편하게 사용
+            let q2_num_2 = document.getElementById("q2-num-2").value
+            let q2_num_3 = document.getElementById("q2-num-3").value
+
+            msg.textContent = +q2_num_1 + + q2_num_2 +  + q2_num_3; // 값을 호출하는게 .value이며 div,p,span에선 textContent로 사용
+        }
+    </script>
+
+    <!-- Q3. 사용자로부터 숫자 1개를 입력받아 음수인지, 양수인지, 0인지를 판별하여 결과를 alert으로 출력하세요. -->
+    <hr>
+    <input type = "text" id = "q3-num"><button onclick="q3()">제출</button>
+    <script>
+        // alert("양수입니다."), alert("음수입니다."), alert("0입니다.")
+        function q3() {
+            let q3_num = document.getElementById("q3-num").value;
+            if (q3_num > 0){ 
+                alert("양수입니다.")
+            }
+            else if (q3_num < 0) {
+                alert ("음수입니다.") 
+                }
+            else  {
+                alert ("0입니다.")
+            }
+        }
+    </script>
+</body>
+</html>

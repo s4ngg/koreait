@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class = "box-class">Box 1</div>
+    <div class = "box-class" name = 'box-name'>Box 2</div>
+    <div class = "box-class" name = 'box-name'>Box 3</div>
+    <div id = "box-id-4">Box 4</div>
+    <!-- id는 고유해야 한다.-->
+    <div id = "box-id-4">Box 5</div>  <!-- 동일한 id가 있지만 javaScript 가동시 젤 처음에 입력받는 값을 가져오기 때문에 4만 호출됨 -->
+    
+    아이디 : <input type = "text" id = "user-id"> <button type = "button" onclick="getId()"> 등록 </button> <!-- input을 받으면 value라는 속성에 값이 저장됨.-->
+    <div id = "msg"> </div>
+    
+    <script>
+        function getId(){
+            console.log("getId 함수가 호출되었습니다.")
+            // user-id라는 id를 가진 요소 가져오기
+            let userID = document.getElementById("user-id")
+            console.log(userID)
+            console.log(userID.type)
+            console.log(userID.id)
+            console.log(userID.value)
+            
+            // msg라는 id를 가진 요소 가져오기
+            // - 가져온 요소의 텍스트 노드에 사용자가 입력한 값 넣기 (textContent)
+            let msgID = document.getElementById("msg")
+            msg.textContent = userID.value // userID.value가 입력한 값이기 때문에 msgID가 아닌 userID사용
+        }
+
+
+        let box4 = document.getElementById("box-id-4"); // 특정한 id를 가진 div 태그 호출
+        console.log(box4);
+        // innerHTML은 HTML 태그가 그대로 렌더링되기 때문에 되도록 사용 x
+        box4.innerHTML = "<strong>텍스트 바꾸기</strong>"; // div에 있는 문자열이 바뀜
+
+
+        //Element's'로 배열형태로 가져옴. tag는 잘 사용안하고 Class,Name은 가끔 사용
+        let boxTag = document.getElementsByTagName("div"); // 태그 이름으로 가져오면 구별이 잘 안돼서 자주 X
+        console.log(boxTag); 
+
+        let boxClass = document.getElementsByClassName("box-class");
+        console.log(boxClass)
+
+        let boxName = document.getElementsByName("box-name");
+        console.log(boxName)
+    </script>
+
+    <input type = "text" id = "input_2"><button onclick="clickBtn()">버튼</button>
+    <script>
+        function clickBtn(){
+            let input2 = document.getElementById("input_2")
+            input2.value = "value에 값 넣기"
+            input2.type = "password" // 스모킹 처리
+
+            // DOM 요소를 자바스크립트 객체로 보여주는 기능 (console.dir)
+            console.dir(input2)
+        }
+    </script>
+</body>
+</html>

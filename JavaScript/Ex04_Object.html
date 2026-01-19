@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let book = { // fuction {}이 아닌 객체를 설정하는 것이기 때문에 '=' 사용
+            name : "자바의 정석",
+            author : "남궁성",
+            year : 1999,
+            genre : "Novel"
+        }
+
+        console.log(book)
+        console.log(book.name)
+        book.pages = 333 // pages 라는 key가 존재하지 않기 때문에 추가됨
+        book.year = 2002 // year라는 key가 존재하기 때문에 수정됨
+        console.log(book)
+
+        delete book.genre // genre라는 key를 가진 요소가 삭제됨
+        console.log(book)
+
+        function updateName(book, newName) { 
+            book.name = newName;
+        }
+
+        const keys = Object.keys(book); // 객체의 key만 전달받음
+        console.log(keys)
+
+        const values = Object.values(book); // 객체의 value만 전달받음
+        console.log(values)
+
+        updateName(book, "변경"); 
+        console.log(book);  
+
+        // Q1. 사용자 정보 관리
+        // 사용자 정보를 관리하는 user 객체에서 name,age,job 속성을 가지며, 업데이트 하는 함수 updateJob을 구현하세요
+        let user = {
+            name : "김상우",
+            age : 25, 
+            job : "dev"
+        }
+        
+        function updateJob(i, newJob) {   // 객체를 주체로 하는 함수(참조형 전달), 첫번째 매개변수는 임의의 이름을 설정해도 된다.
+            i.job = newJob;
+        }
+
+        console.log(user)
+        updateJob(user, "변경");
+        console.log(user);
+
+        let scores = [55, 66, 77]; // []는 배열으로써 인덱스로 접근해야함
+        console.log(scores[0])
+
+        let score = [ // 객체 배열
+            {
+                name : "김상우",
+                scores : 60
+            },
+            {
+                name : "철수",
+                scores : 80
+            },
+            {
+                name : "짱구",
+                scores : 50
+            }
+        ]
+        console.log(score);
+        console.log(score[1].score);
+
+        // 짱구의 점수를 100점으로 바꾸기
+        score[2].scores = 100;
+        console.log(score) 
+
+        // product 변수 (배열)
+        // - 0번 인덱스 : name "노트북", price : 1700000, stock : 5
+        // - 1번 인덱스 : name "마우스", price : 65000, stock : 0
+        // - 2번 인덱스 : name "키보드", price : 130000, stock : 3
+
+        let product = [
+            {
+                name : "노트북",
+                price : 1700000,
+                stock : 5
+            },
+            {
+                name : "마우스",
+                price : 65000,
+                stock : 0
+            },
+            {
+                name : "키보드",
+                price : 130000,
+                stock : 3
+            }
+        ]
+
+        // 1. 노트북의 가격을 150만원으로 변경하세요.
+        // 2. 마우스의 재고를 15개로 변경하세요.
+        product[0].price = 1500000;
+        product[1].stock = 15; 
+
+        console.log(product)
+
+        for (let i=0; i<product.length; i++){ // javaScript는 자료형 대신 var, let, const를 사용하기 때문에 let으로 받아온다.
+            // console.log(product[i].name);
+
+            // 재고가 0인 상품의 이름만 출력
+            if(product[i].stock === 0){ // '===' 는 값이랑 type 동시에 비교 
+                console.log(product[i].name);
+            }
+        }
+    </script>
+</body>
+</html>
