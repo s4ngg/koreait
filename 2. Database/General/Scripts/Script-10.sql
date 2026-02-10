@@ -1,0 +1,970 @@
+1. DML
+	- 데이터 조회 및 변경을 하기 위한 언어
+	- 종류 : SELECT, INSERT, DELETE, UPDATE 
+
+2. SELECT
+	- 데이터를 조회할 때 사용
+	- 문법 : SELECT 컬럼명 FROM 테이블명;
+
+3. INSERT
+	- 데이터를 추가할 때 사용
+	- 문법 : INSERT INTO 테이블명 VALUES(값1, 값2, ...);
+	- 주의 : 값을 넣을 때 테이블에 정의된 컬럼의 순서와 데이터 타입에 맞게 넣어야 함
+
+4. UPDATE
+	- 데이터를 변경할 때 사용
+	- 문법 : UPDATE 테이블명 SET 컬럼1 = 변경할 값1, 컬럼2 = 변경할 값2 WHERE 조건;
+	- 주의1 : 조건을 주지 않으면 테이블에 존재하는 전체 데이터가 변경되기 때문에 조건을 반드시 설정
+	- 주의2 : 같은 조건을 가진 데이터가 여러개라면 여러개가 변경됨
+	
+5. DELETE
+	- 데이터를 삭제할 때 사용
+	- 문법 : DELETE FROM 테이블명 WHERE 조건;
+	- 주의 : 조건을 주지 않으면 테이블에 존재하는 모든 데이터가 삭제됨
+	
+######################################################
+1.DDL
+	- 데이터베이스의 객체를 생성, 수정, 삭제하는 언어
+	- 종류 : CREATE, ALTER, DROP
+	- 문법 : CREATE 객체명, ALTER 객체명, DROP 객체명
+
+2. CREATE TABLE 표현법
+	- CREATE TABLE 테이블명(
+		컬렴명1 자료형,
+		컬럼명2 자료형,
+		컬럼명3 자료형
+	)
+
+3. 자주 사용되는 자료형의 종류
+	- VARCHAR(byte) : 가변 길이 문자열 (최대 65,535 바이트)
+	- TEXT : 대용량 텍스트 타입 (주로 게시판 내용 등에 사용)
+	- INT : 숫자(정수형)
+	- DECIMAL (P,S) : 숫자(실수형, 문자열 기반 고정 소수점) -- DECIMAL(5,2) = (123.45)와 같이 사용
+		> 문자열 기반 고정 소수점이기 때문에 오차가 존재하지 않음
+		> P : 전체 자릿수
+		> S : 소수점 기준 자릿수
+	- DATE : 날짜 (YYYY-MM-DD)
+	- DATETIME : 날짜 + 시간 (YYYY-MM-DD HH:MM:SS)
+1. 제약조건(CONSTRAINT)
+	- 컬럼에 어떠한 조건을 걸어 부적절한 데이터가 추가되는 것을 방지하는 조건
+	- 종류 : NOT NULL, UNIQUE, PRIMARY KEY, FOREIGN KEY, ...
+	
+2. NOT NULL
+	- 해당 컬럼에 빈 값(NULL)이 들어올 수 없는 제약 조건
+	- 반드시 값이 있어야 하는 컬럼
+	- ex) 회원 테이블의 아이디, 비밀번호 등
+	
+3. UNIQUE
+	- 해당 컬럼에 반드시 유일해야 하는 값
+	- 중복 불가
+
+4. CHECK
+	- 해당 컬럼에 들어와야 할 값을 미리 정해두는 제약 조건
+	- ex) 성별에는 'W', 'M'만 들어올 수 있음
+	> 현재 MySQL에서 대소문자 구분 옵션이 꺼져 있으므로 소문자도 가능하다.
+
+5. DEFAULT
+ 	- 해당 컬럼에 아무런 값이 들어오지 않을 경우 추가할 값을 설정하는 제약 조건 (기본값 설정)
+ 	- ex) 회원가입일, 게시글 작성일, 게시글 조회수 등
+ 	
+ 6.PRIMARY KEY (기본키)
+ 	- 테이블에서 데이터를 유일하게 식별할 수 있는 제약 조건
+ 	- 중복 불가(UNIQUE) + 빈값 불가(NOT NULL)
+  	- ex) 회원 번호, 주문 번호 등
+  	
+  7.FOREIGN KEY (외래키)
+  	- 다른 테이블의 값을 참조하여 테이블간의 관계를 맺어주는 제약 조건
+  	- 참조할 수 있는 컬럼은 기본키(PK) 또는 UNIQUE만 가능
+  	- FK가 설정된 컬럼에는 참조중인 테이블의 PK가 가지고 있지 않은 값은 삽입할 수 없음
+  	  (데이터의 일관성을 유지시킴)
+  	
+ 8. 제약조건 사용 예시 
+ 	- AUTO_INCREMENT : 숫자를 자동으로 증가시켜주는 기능
+CREATE TABLE board (
+ 	board_int PRIMARY KEY AUTO_INCREMENT,
+ 	title varchar(300) NOT NULL,CHECK,
+ 	content text NOT NULL,
+ 	views int NOT NULL DEFAULT 0,
+ 	delete_status varchar(1) NOT NULL DEFAULT 'N'
+ 							 CHECK (delete_status IN('Y','N')),
+ 	member_id int
+ 	CONSTRAINT fk_member_id FOREIGN KEY(member_id)
+ 	REFERENCES MEMBER(member_id)
+ );
+1. 연산자 종류
+	- () : 우선순위 높이기 위해서 사용
+	- 산술 연산자 : (*,/,+,-) 사칙 연산
+	- 비교 연산자 : (=,!=,<>,<,<=,>,>=)
+	- IS NULL, LIKE, IN
+		> IS NULL : 빈 값인지 확인
+		> LIKE : 문자열 패턴 검색 (%는 0글자 이상, _는 무조건 1글자)
+		> IN : 여러 값을 비교할 때 사용(컬럼명 IN('M','W'))
+	- BETWEEN 이상값 AND 이하값 (범위 검색)
+	- NOT : 논리 부정(참을 거짓으로, 거짓을 참으로)
+	- AND : 두 피연산자의 조건이 모두 같다면 참
+	- OR : 두 피연산자 중 하나라도 같다면 
+
+2. 정렬
+	- ORDER BY 컬럼명
+		> 옵션1 : ASC(기본값) 오름차순
+		> 옵션2 : DESC 내림차순
+	
+3. 그룹 함수
+	- 여러 개의 행을 묶어 연산하여 결과를 반환
+	- 아래에서 작성할 그룹함수 외에도 다양한 그룹함수를 지원
+	
+4. 그룹 함수 종류(집계함수)
+	- max(컬럼명) : 최댓값
+	- min(컬럼명) : 최솟값
+	- avg(컬럼명) : 평균값
+	- sum(컬럼명) : 합계값
+	- count(컬럼명) : 반환된 행의 개수
+	
+5. GROUP BY
+	- 조회된 데이터의 여러개 행을 특정 컬럼의 값을 기준으로 묶어 그룹화
+	- 일반적으로 그룹함수와 함께 사용
+	
+6. HAVING 
+	- 그룹 함수를 이용한 조건을 작성할 대 주로 사용
+	- ex) count(*) >= 100
+	- 주의 : 문법상 GROUP BY 뒤에 위치해야한다.
+	
+7. SELECT 실행 순서
+	- 맨 처음 FROM으로 테이블을 가져온다
+	- 이후 아래로 쭉 실행 (모두 실행되거나, ORDER BY를 만나기 전 까지)
+	- 이후 SELECT로 필요한 컬럼만 조회
+	- ORDER BY가 있다면 마지막으로 실행
+	- ex) FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY
+
+8. JOIN
+	- 두 개 이상의 테이블의 데이터를 모두 조회할 때 사용
+	- 종류 : INNER JOIN, LEFT JOIN, RIGHT JOIN, ...
+
+9. INNER JOIN
+	- ON절에서 두 테이블의 공통된 값이 있을 경우에만 조회
+
+10. LEFT JOIN
+	- ON절에서 두 테이블의 공통된 값이 없어도 기준 테이블 (FROM 테이블)은 무조건 조회
+	- 합쳐진 테이블은 값이 없어도 NULL로 채워져서 조회된다.
+	
+11. RIGHT JOIN
+	- ON절에서 두 테이블의 공통된 값이 없어도 조인된 테이블(JOIN 테이블)은 무조건 조회
+	- 기준 테이블은 값이 없어도 NULL로 채워져서 조회됨
+	
+12. 서브 쿼리
+	- SQL 쿼리 안에 포함된 또 다른 쿼리
+	- 쿼리안에 쿼리가 있는 구조
+	
+13. 조건 서브 쿼리
+	- WHERE절에 사용하는 서브쿼리
+	- 단일행 서브쿼리 : 서브쿼리의 실행 결과가 데이터가 1개인 서브쿼리
+	- 다중행 서브쿼리 : 서브쿼리의 실행 결과가 컬럼이 2개 이상인 서브쿼리
+	- 다중열 다중행 서브쿼리 : 서브쿼리의 실행 결과가 데이터가 2개 이상, 컬럼이 2개 이상인 서브쿼리
+	
+14. 단일행 서브쿼리
+	- 결과 값의 데이터(행)가 1개인 서브쿼리
+	- 단일행 비교 연산자 사용
+		> 단일행 비교 연산자 : =, <=, <, >=, >, !=
+	- 예시) SELECT first_name, last_name FROM employees
+		   WHERE emp_no = (SELECT max(emp_no FROM employees)
+
+15. 다중행 서브쿼리
+	- 결과 값의 데이터(행)가 2개 이상인 서브쿼리
+	- 다중행 비교 연산자 사용
+		> 다중행 비교 연산자 : IN, ALL, ANY, ...ANY 
+	- 예시) SELECT emp_no, salary FROM salaries
+		   WHERE salary IN (SELECT salary FROM salaries)
+		   
+16. 다중열 다중행 서브쿼리
+	- 결과 값의 데이텅화 컬럼의 개수가 2개 이상인 서브쿼리
+	- 예시) SELECT emp_no, title, to_date form titles
+		   WHERE (emp_no, to_date) IN (SELECT emp_no, max(to_date) FROM titles GROUP BY emp_no)
+		   
+17. 인라인 뷰 
+	- FROM절에 서브쿼리를 사용하는 방식
+	- 서브쿼리 수행 결과가 테이블처럼 사용된다.
+	- 예시) SELECT * FROM(SELECT dept_no, count(*) AS cnt FROM dept_emp
+						 GROUP BY dept_no) d;
+	- 주의1) 반드시 인라인 뷰 작성 후 테이블 별칭을 지어줘야한다. -> d
+	- 주의2) 그룹 함수 사용 시 별칭을 지어줘야 메인쿼리에서 사용이 가능하다. -> cnt
+	- 참고) 조건은 되도록 메인 쿼리에서 작성 해주는 것이 성능상 좋다.
+1. 데이터베이스 정규화
+	- 이상 문제를 해결하기 위해 속성(컬럼)들 끼리의 종속 관계를 분석하여
+	  여러개의 릴레이션(테이블)으로 분해하는 과정
+
+2. 이상 문제
+	- 삽입 이상 : 데이터를 저장할 때 원하지 않는 정보가 함께 삽입되는 경우
+	- 삭제 이상 : 튜플(데이터)을 삭제함으로써 유지되어야 하는 정보까지도 연쇄적으로 삭제되는 경우
+	- 갱신 이상 : 중복된 튜플(데이터) 중 일부의 속성(컬럼)만 갱신 시킴으로써 정보의 모순성이 발생하는 경우
+	
+3. 정규화를 너무 많이하면 생기는 단점
+	- 릴레이션 분해가 많이 될 수록 JOIN을 자주 사용하게 되어 SELECT 쿼리의 속도가
+	  상대적으로 느려지기 때문에 적정선에서 해야 한다.
+	 
+4. 데이터베이스 반정규화
+	- 성능 향상을 목적으로 정규화된 데이터 모델을 정규화 원칙에 벗어나게 하는 것을 의미
+	- 요약 : 쪼개진 테이블을 다시 합친다
+	- 반정규화 하는 이유 : SELECT를 자주하는데 성능상 문제가 발생할 경우(조회가 느리거나 등)
+	- 단점 : 이상 문제가 발생할 수 있다.
+1. TCL (TRANSACTION Controll LANGUAGE)
+	- 트랜잭션을 제어하는 언어
+
+2. 트랜잭션(transaction)
+	- 데이터베이스에서 실행되는 논리적인 작업 단위
+	- INSERT, UPDATE, DELETE와 같은 데이터베이스의 상태를 변화시키는 일련의 작업 단위를 의미한다.
+	- 예시) A가 B에게 10,000원을 송금해야 한다.
+		> 1) A에게 10,000원이 있는지 조회 (SELECT)
+		> 2) A의 잔액에서 10,000원 빼기 (UPDATE)
+		> 3) B의 잔액에 10,000원 추가 (UPDATE)
+		
+3. COMMIT 
+	- 현재 트랜잭션에서 작업한 내용을 데이터베이스에 반영
+
+4. ROLLBACK
+	- 현재 트랜잭션의 작업한 내용을 취소 (마지막 COMMIT 시점으로 되돌아가기)
+	
+	
+CREATE TABLE member_notnull (
+	id varchar(50) NOT NULL,
+	pwd varchar(250) NOT NULL,
+	name varchar(50),
+	age int,
+	in_date datetime
+);
+
+INSERT INTO member_notnull
+VALUES ('test', 'qwer1234', NULL, NULL, now());
+
+INSERT INTO member_notnull(id, pwd, in_date)
+VALUES ('test2','qwer1234',now());
+
+SELECT * FROM member_notnull;
+
+###################################################
+CREATE TABLE member_unique(
+	id varchar(50) NOT NULL UNIQUE,
+	pwd varchar(250) NOT NULL 
+);
+
+INSERT INTO member_unique VALUES ('test','qwer1234');
+INSERT INTO member_unique VALUES ('test','qwer1234');
+
+####################################################
+CREATE TABLE member_check(
+	gender varchar(1) CHECK (gender IN('W','M'))
+);
+
+
+INSERT INTO member_check VALUES('W');
+INSERT INTO member_check VALUES('w');
+INSERT INTO member_check VALUES('asdasd');
+SELECT * FROM member_check;
+#########################################
+CREATE TABLE member_default (
+	id varchar(50),
+	in_data datetime DEFAULT now()
+);
+
+INSERT INTO member_default(id) VALUES('test');
+SELECT * FROM member_default;
+#########################
+CREATE TABLE member_pk1(
+	member_pk_id int PRIMARY KEY auto_increment, -- auto_increment는  null이거나 값을 안넣으면 1씩 증가하면서 데이터가 삽입됨.
+	id varchar(50)
+);
+DROP TABLE member_pk;
+-- 중복x + null 금지 2개 합쳐진게 primary key
+INSERT INTO member_pk1 VALUES (1,'test');
+INSERT INTO member_pk1 VALUES (null,'test');
+INSERT INTO member_pk1 VALUES (NULL,'test'); 
+
+SELECT * FROM member_pk1;
+##########################################
+CREATE TABLE member_primary(
+	member_primary_id int PRIMARY KEY AUTO_INCREMENT,
+	id varchar(50)
+)
+
+CREATE TABLE board_foreign(
+	board_foreign_id int PRIMARY KEY AUTO_INCREMENT,
+	title varchar(300),
+	-- writer_id int REFERENCES member_primary(member_primary_id)
+	writer_id int,
+	CONSTRAINT fk_wriker FOREIGN KEY (writer_id)
+	REFERENCES member_primary(member_primary_id)
+); 
+ 
+DROP TABLE board_foreign;
+
+INSERT INTO member_primary(id)
+VALUES ('test1'),
+	   ('test2'),
+       ('test3');
+SELECT * FROM member_primary;
+
+INSERT INTO board_foreign(title, writer_id) VALUES('게시글 제목!!', 2);
+INSERT INTO board_foreign(title) VALUES('test');
+SELECT * FROM board_foreign; 
+-- employees라는 데이터베이스 선택
+use employees;
+
+-- select * from employees; -- * : 모든 컬럼 선택. -> select * <모든 컬럼 선택> from employees <employees 테이블에서> 
+
+-- Q1.실습
+select emp_no, birth_date from employees;
+select hire_date from employees;
+select emp_no, from_date, to_date from dept_manager;
+select * from departments;
+
+insert into employees 
+values (1,
+		'2000-01-01',
+		'sangwoo',
+		'kim',
+		'M',
+		now()); -- now는 현재 date 의미
+
+select * from employees;
+
+-- Q1.실습
+INSERT INTO departments 
+VALUES ('d010',
+		'Korea IT Department');
+ 
+INSERT INTO employees 
+VALUES (2,
+		'2002-01-01',
+		'kim',
+		'sangwoo',
+		'M',
+		now());
+
+INSERT INTO dept_emp
+VALUES (1,
+		'd010',
+		now(),
+		'9999-01-01');
+
+UPDATE employees
+SET first_name = '길동'
+WHERE emp_no = 10001; -- emp_no의 10001의 값을 가진 first_name을 길동으로 바꾼다
+ 
+UPDATE employees
+SET last_name = '홍',
+	hire_date = now()
+WHERE emp_no = 10001;
+
+SELECT * FROM employees;
+
+-- Q2. 실습
+UPDATE departments
+SET Sales = 'Tech Sales'
+WHERE dept_no = 'd007';
+ 
+UPDATE employees
+SET birth_date = '1977-07-07'
+WHERE last_name = 'Erie';
+ 
+SELECT * FROM employees
+WHERE last_name = 'Erie';
+
+DELETE FROM employees 
+WHERE emp_no = 10005;
+SELECT *  FROM employees;
+
+DELETE FROM employees 
+WHERE hire_date = '1993-05-12';
+
+SELECT * FROM employees
+WHERE hire_date = '1993-05-12';
+
+DELETE FROM employees 
+WHERE emp_no = 28847;
+
+
+-- 
+CREATE TABLE test_member (
+	member_id varchar(50) COMMENT '아이디', -- 뒤에 COMMENT를 붙혀 메세지 추가
+	member_pwd varchar(255) COMMENT '비밀번호',
+	member_name varchar(50) COMMENT '이름',
+	member_age TINYINT COMMENT '나이',
+	member_in_date datetime COMMENT '가입일'
+);  
+ 
+ DROP TABLE test_member; -- drop은 테이블 삭제
+
+ 
+ CREATE TABLE free_board (
+ 	board_no int COMMENT '게시판 번호',
+ 	board_title varchar(100) COMMENT '게시판 제목',
+ 	board_content TEXT COMMENT '게시판 내용',
+ 	board_date datetime COMMENT '게시판 작성일',
+ 	board_views int COMMENT '게시판 조회수'
+ );
+ 
+ INSERT INTO free_board 
+ VALUES (6,
+ 	'임시1',
+ 	'데이터1',
+ 	now(),
+ 	5);
+ 
+ INSERT INTO free_board 
+ VALUES (7,
+ 	'임시2',
+ 	'데이터2',
+ 	now(),
+ 	7);
+ 
+ INSERT INTO free_board 
+ VALUES (9,
+ 	'임시3',
+ 	'데이터3',
+ 	now(),
+ 	9);
+ SELECT * FROM free_board
+ 
+ 
+ CREATE TABLE ddl_alter_test (
+ 	alter_id varchar(255),
+ 	alter_name varchar(255),
+ 	alter_as varchar(255)
+ );
+ 
+ -- 테이블 이름 변경
+ ALTER TABLE ddl_alter_test RENAME TO ddl_alter;
+
+ -- 테이블 구조 변경 (컬럼 변경)
+ ALTER TABLE ddl_alter
+ MODIFY alter_as varchar(100); -- modify는 컬럼의 속성 변경하는 명령어
+ 
+ -- 테이블 구조 변경 (컬럼 추가)
+ ALTER TABLE ddl_alter 
+ADD alter_pwd varchar(255); -- add는 컬럼을 추가하는 명령어
+
+-- 테이블 구조 변경 (컬럼 삭제)
+ALTER TABLE ddl_alter 
+DROP COLUMN alter_as; 
+-- drop column은 컬럼을 삭제하는 명령어 / drop은 종류가 여러가지라 삭제할 속성을 추가 작성해줘야함
+-- rename 도 마찬가지로 rename column사용
+ 
+-- alter_name이라는 컬럼에 중복된 값이 들어가서는 안된다라는 조건을 추가
+-- constraint : 제약조건 추가
+-- unique : 중복 불가
+ALTER TABLE ddl_alter 
+ADD CONSTRAINT alter_name_unique UNIQUE(alter_name); -- 제약의 이름설정
+ 
+-- "sang", "김상우", 'qwer1234!'
+-- "test", "김상우", '1234'
+INSERT INTO ddl_alter 
+VALUES ("sang", "김상우66", 'qwer1234!'),
+	   ("test", "김상우55", '1234');
+
+SELECT * FROM ddl_alter;
+
+-- MySQL에서는 지원 X, 수정하려면 제거 후 다시 추가
+-- ALTER TABLE ddl_alter 
+-- RENAME CONSTRAINT alter_name_unique TO name_unique; 
+
+ALTER TABLE ddl_alter
+DROP CONSTRAINT alter_name_unique;
+
+ALTER TABLE ddl_alter
+ADD CONSTRAINT name_unique UNIQUE(alter_name);
+
+CREATE TABLE test_employees(
+	te_employee_id int,
+	te_first_name varchar(50),
+	te_last_name varchar(50),
+	te_salary int,
+	te_department varchar(50)
+);
+-- Q1. 실습
+ALTER TABLE test_employees RENAME TO STAFF;
+ALTER TABLE STAFF 
+MODIFY te_department varchar(100),
+RENAME COLUMN te_last_name TO surname,
+DROP COLUMN te_first_name,
+ADD te_hire_date datetime,
+ADD CONSTRAINT te_salary_check UNIQUE(te_salary);
+
+DROP TABLE ddl_alter;
+
+-- free_board, staff, test_member 제거하기
+DROP TABLE free_board, staff, test_member;
+-- Q1. employees 테이블의 모든 데이터를 조회하세요.
+USE employees;
+SELECT * FROM employees;
+
+-- Q2. employees 테이블에서 성별이 'M' 인 사원만 조회하세요.
+SELECT * FROM employees WHERE gender = 'M';
+
+-- Q3. employees 테이블에서 1990년 이후 입사한 사원만 조회하세요.
+SELECT * FROM employees WHERE hire_date >= '1990-01-01';
+
+-- Q4. employees 테이블에서 first_name이 'Georgi' 인 사원을 조회하세요.
+SELECT * FROM employees WHERE first_name = 'Georgi';
+
+-- Q5. employees 테이블에서 사번(emp_no)이 10010인 사원을 조회하세요.
+SELECT * FROM employees WHERE emp_no = 10010;
+
+-- Q6. departments 테이블의 모든 부서를 조회하세요.
+SELECT * FROM departments;
+
+-- Q7. departments 테이블에서 부서명이 'Tech Sales' 인 부서를 조회하세요.
+SELECT * FROM departments WHERE dept_name = 'Tech Sales';
+
+-- Q9. 새로운 부서 'AI Research' 를 추가하세요.
+INSERT INTO departments VALUES('d11','AI_Research');
+
+-- Q10. 새로운 사원 데이터를 employees 테이블에 추가하세요.
+--  - 사번: 999001
+--  - 이름: Kim Jaeseop
+--  - 생일: now()
+--  - 성별: M
+--  - 입사일: 2026-01-01
+INSERT INTO employees VALUES(999001, now(), 'Kim','Sang Woo', 'M', '2026-01-01');  
+
+-- Q11. titles 테이블에 사번 1의 직급을 'Engineer' 로 추가하세요.
+SELECT * FROM titles;
+INSERT INTO titles VALUES(1,'Engineer',now(),null);  
+
+-- Q12. salaries 테이블에 사번 499001의 급여를 60000으로 추가하세요.
+SELECT * FROM salaries WHERE emp_no = 499001;
+INSERT INTO salaries VALUES(499001,60000,'2026-01-01','9999-01-01');
+
+-- Q13. 사번 499001의 급여를 65000으로 수정하세요.
+SELECT * FROM salaries WHERE emp_no = 1;
+UPDATE salaries SET salary = 65000 WHERE emp_no = 499001;
+
+-- Q14. 사번 499001의 성별을 'F' 로 변경하세요.
+UPDATE employees SET gender = 'F' WHERE emp_no = 499001; 
+
+-- Q15. 사번 499001의 직급을 'Senior Engineer' 로 변경하세요.
+UPDATE titles SET title = 'Senoir Engineer' WHERE emp_no = 499001;
+
+-- Q16. 급여, 직원 테이블에서 사번 10013 직원을 제거하세요.
+DELETE FROM salaries WHERE emp_no = 10013;
+DELETE FROM employees WHERE emp_no = 10013;
+
+SELECT emp_no AS '사번', salary/12 AS '월급' FROM salaries s ; -- salary/12 해서 연봉/12해서 월급 구한거
+SELECT emp_no + 50, first_name FROM employees WHERE first_name = '길동';
+WHERE first_name = '길동';
+
+SELECT DISTINCT gender FROM employees; -- gender 컬럼에서 중복된 값 제외
+
+-- salaries 테이블에서 salary 컬럼의 값을 월급이라고 가정
+-- 1. 월급 (기존값)
+-- 2. 예상 연봉 (salary * 12) 별칭은 "예상 연봉"
+-- 3. 5% 인상 후의 예상 연봉 (salary * 12 * 1.05) 별칭은 "인상 후 예상 연봉"
+
+SELECT salary, salary * 12 AS '예상 연봉', salary*12*1.05 AS '인상 후 예상 연봉' FROM salaries s ;
+
+SELECT emp_no, salary, from_date, to_date FROM salaries s WHERE salary >= 80000;
+
+SELECT * FROM employees WHERE emp_no < 10005;
+
+-- 입사일이 1960년 1월 1일 이후이면서 성별이 남자인 직원 조회
+SELECT * FROM employees WHERE hire_date > '1960-01-01' AND gender = 'M';
+
+-- 직급이 'Senior Engineer'인 사람과 'Engineer'인 사람 모두 조회
+SELECT * FROM titles WHERE title = 'Senior Engineer' OR title = 'Engineer';
+
+-- salaries 테이블에서 연봉이 50000 이상이면서 60000 이하인 직원 조회
+SELECT * FROM salaries WHERE salary BETWEEN 50000 AND 60000; -- between 사용 
+
+-- salaries 테이블에서 연봉이 50000 이상이면서 60000 미만인 직원 조회 
+SELECT * FROM salaries WHERE salary BETWEEN 50000 AND 59999; -- between 사용 
+
+SELECT * FROM employees WHERE hire_date BETWEEN '1995-01-01' AND '1995-12-31';
+
+SELECT * FROM employees WHERE first_name LIKE 'N%'; -- 'n %' %가 뒤에 왔으니 N~~~~~ 으로 시작하는 모든 데이터 조회
+
+SELECT * FROM employees WHERE first_name LIKE '%en'; -- '% en' %가 앞에 왔으니 ~~~~en으로 끝나는 모든 데이터 조회
+
+SELECT * FROM employees WHERE first_name LIKE '%ar%'; -- '% ar % ' %가 양쪽에 있으니 ar을 '포함'하는 모든 데이터 조회
+
+SELECT * FROM employees WHERE first_name LIKE '_di'; -- '_di'는 _갯수만큼 앞에 값이 채워져 있어야 가능
+
+SELECT * FROM employees WHERE first_name LIKE 'G__'; -- 'g__'는 _가 2개이기 때문에 g로 시작하고 뒤에 글자가2개 와야함.
+
+SELECT * FROM employees WHERE first_name NOT LIKE 'g__'; -- not은 부정
+
+SELECT * FROM titles WHERE to_date IS NULL; -- 'is null'은 값이 null애들만 조회 // null이 아닌 애들은 'is 'not' null'로 사용한다.
+
+-- in // where 00 IN('ddd1','ddd2'); ddd1이랑 ddd2 찾기. // 2개면 or도 가능한디 여러개 쓸거면 in() 사용.
+SELECT * FROM departments d WHERE dept_no IN('d005','d009'); 
+
+
+-- Q1. salaries 테이블에서 급여에 1000을 더한 값을 조회하세요.
+SELECT salary + 1000 FROM salaries;
+
+-- Q2. salaries 테이블에서 급여에서 세금 10%를 뺀 실수령액을 조회하세요.
+SELECT salary * 0.9 FROM salaries;
+
+-- Q3. salaries 테이블에서 연봉을 월급으로 계산하여 조회하세요.
+SELECT salary / 12 FROM salaries;
+
+-- Q4. employees 테이블에서 성별 목록을 중복 없이 조회하세요.
+SELECT DISTINCT gender FROM employees;
+
+-- Q5. titles 테이블에서 직급 목록을 중복 없이 조회하세요.
+SELECT DISTINCT title FROM titles;
+
+-- Q6. employees 테이블에서 사번이 10006인 사원을 조회하세요.
+SELECT * FROM employees WHERE emp_no = 10006;
+
+-- Q7. salaries 테이블에서 급여가 60000 이상인 사원을 조회하세요.
+SELECT * FROM salaries WHERE salary >= 60000;
+ 
+-- Q8. employees 테이블에서 입사일이 1995년 이후인 사원을 조회하세요.
+SELECT * FROM employees WHERE hire_date >= '1995-01-01';
+ 
+-- Q9. employees 테이블에서 성별이 F인 사원을 조회하세요.
+SELECT * FROM employees WHERE gender = 'F';
+
+-- Q10. dept_emp 테이블에서 부서 번호가 d005인 사원을 조회하세요.
+SELECT * FROM dept_emp WHERE dept_no = 'd005';
+
+-- Q11. salaries 테이블에서 급여가 60000 이상이고 80000 이하인 사원을 조회하세요.
+SELECT * FROM salaries WHERE salary BETWEEN 60000 AND 80000;
+
+-- Q12. employees 테이블에서 성별이 M이거나 입사일이 1990년 이전인 사원을 조회하세요.
+SELECT * FROM employees WHERE gender = 'M' OR hire_date < '1990-01-01';
+
+-- Q14. dept_emp 테이블에서 부서가 d001이고 현재 재직 중인 사원을 조회하세요.
+SELECT * FROM dept_emp WHERE dept_no ='d001' AND to_date = '9999-01-01';
+
+-- Q15. salaries 테이블에서 급여가 40000 미만이거나 100000 초과인 사원을 조회하세요.
+SELECT * FROM salaries WHERE salary < 40000 OR salary >100000;
+
+-- Q16. employees 테이블에서 성별이 F이면서 1995년 이후 입사한 사원을 조회하세요.
+SELECT * FROM employees WHERE gender = 'F' AND hire_date > '1995-01-01';
+
+-- Q17. salaries 테이블에서 급여가 50000부터 70000 사이인 사원을 조회하세요.
+SELECT * FROM salaries WHERE salary BETWEEN 50000 AND 70000;
+
+-- Q18. employees 테이블에서 입사일이 1990년부터 1995년 사이인 사원을 조회하세요.
+SELECT * FROM employees WHERE hire_date BETWEEN '1990-01-01' AND '1995-01-01';
+
+-- Q19. employees 테이블에서 사번이 10010부터 10020 사이인 사원을 조회하세요.
+SELECT * FROM employees WHERE emp_no BETWEEN 10010 AND 10020;
+
+-- Q20. salaries 테이블에서 급여가 80000 이상 100000 이하인 사원을 조회하세요.
+SELECT * FROM salaries WHERE salary BETWEEN 80000 AND 100000; 
+
+-- Q21. dept_emp 테이블에서 부서 번호가 d003부터 d006 사이인 사원을 조회하세요.
+SELECT * FROM dept_emp WHERE dept_no BETWEEN 'd003' AND 'd006';
+
+-- Q22. employees 테이블에서 이름이 A로 시작하는 사원을 조회하세요.
+SELECT * FROM employees WHERE first_name LIKE 'A%';
+
+-- Q23. employees 테이블에서 이름이 n으로 끝나는 사원을 조회하세요.
+SELECT * FROM employees WHERE first_name LIKE '%n';
+
+-- Q24. employees 테이블에서 이름에 'an'이 포함된 사원을 조회하세요.
+SELECT * FROM employees WHERE first_name LIKE '%an%';
+
+-- Q25. employees 테이블에서 이름이 5글자인 사원을 조회하세요.
+SELECT * FROM employees WHERE first_name LIKE '_____';
+ 
+-- Q26. employees 테이블에서 성(last_name)에 'son'이 포함된 사원을 조회하세요.
+SELECT * FROM employees WHERE last_name LIKE '%son';
+
+-- Q27. titles 테이블에서 to_date가 NULL인 데이터를 조회하세요.
+SELECT * FROM titles WHERE to_date IS NULL;
+
+-- Q28. dept_emp 테이블에서 부서가 d001, d003, d005인 사원을 조회하세요.
+SELECT * FROM dept_emp WHERE dept_no IN ('d001','d003','d005');
+
+-- Q29. employees 테이블에서 사번이 10001, 10005, 10010인 사원을 조회하세요.
+SELECT * FROM employees WHERE emp_no IN (10001, 10005, 10010);
+
+-- Q30. departments 테이블에서 부서명이 Sales 또는 Development인 부서를 조회하세요.
+SELECT * FROM departments WHERE dept_name IN ('Sales', 'Development');
+SELECT * FROM employees ORDER BY birth_date; -- order by : 오름차순 정렬
+SELECT * FROM employees ORDER BY birth_date DESC; -- order by 00 DESC : 내림차순 정렬
+SELECT * FROM employees ORDER BY birth_date ASC; -- order by 00 ASC : 오름차순 정렬인데 기본값이 오름차순이라 ASC 스킵해도 됨.
+SELECT * FROM titles ORDER BY to_date DESC;
+
+-- Group 함수
+-- max, min, avg, sum 기능 // count : 조회된 컬럼의 개수 확인, 보통 *로 확인
+SELECT max(salary) FROM salaries s;  
+SELECT min(salary) FROM salaries s; 
+SELECT avg(salary) FROM salaries s; 
+SELECT sum(salary) FROM salaries s; 
+SELECT count(*) FROM salaries s;
+
+SELECT count(*) AS '직원 수 ' FROM employees;
+
+-- Q1. 실습
+SELECT count(title = 'Enginner') AS '직원 수' FROM titles;
+SELECT count(*) FROM employees WHERE hire_date > '1965-01-01';
+SELECT min(emp_no), max(emp_no) FROM employees;
+
+-- Group By 함수 // 특정 컬럼을 기준으로 묶어 그룹화 시킴
+SELECT max(emp_no), birth_date FROM employees GROUP BY birth_date; -- group by에 작성한 컬럼 기준(birth_date)으로 묶음
+
+-- 부서별 직원 수 구하기
+-- > 부서 번호(dept_no) 조회
+SELECT count(*), dept_no FROM dept_emp GROUP BY dept_no; -- dept_no로 묶고 count로 묶은 dept_no를 출력
+
+-- Q2. 실습
+SELECT count(*) AS 'cnt', gender  FROM employees GROUP BY gender;
+
+SELECT count(*), title AS '직원 수' FROM titles GROUP BY title HAVING count(*) >= 100000 ORDER BY title DESC;
+-- HAVING : 조건을 달아줌
+
+-- dept_emp에서 직원 수가 5만 이상인 부서만 조회
+SELECT count(*), dept_no FROM dept_emp GROUP BY dept_no HAVING count(*) >= 50000;
+
+-- 현재 재직중인 직원들 중 직무별 직원 수가 200명 미만인 직무만 조회
+-- to_date가 9999-01-01이 재직중
+SELECT title, count(*) FROM titles s WHERE to_date = '9999-01-01' GROUP BY title HAVING count(*) <= 200;
+-- Q1. employees 테이블에서 사원을 사번 기준으로 오름차순 정렬하여 조회하세요.
+SELECT * FROM employees ORDER BY emp_no;
+
+-- Q2. employees 테이블에서 사원을 사번 기준으로 내림차순 정렬하여 조회하세요.
+SELECT * FROM employees ORDER BY emp_no DESC;
+
+-- Q3. salaries 테이블에서 급여를 높은 순으로 정렬하여 조회하세요.
+SELECT * FROM salaries ORDER BY salary DESC;
+ 
+-- Q4. employees 테이블에서 입사일 기준으로 오래된 순서대로 정렬하여 조회하세요.
+SELECT * FROM employees ORDER BY hire_date;
+
+-- Q5. employees 테이블에서 성별 기준으로 정렬한 뒤 사번 기준으로 정렬하여 조회하세요.
+SELECT * FROM employees ORDER BY gender ASC, emp_no ASC; -- 2번 정렬이라 asc, 사용
+
+-- Q6. salaries 테이블에서 가장 높은 급여를 조회하세요.
+SELECT max(salary) FROM salaries;
+
+-- Q7. salaries 테이블에서 가장 낮은 급여를 조회하세요.
+SELECT min(salary) FROM salaries;
+
+-- Q8. salaries 테이블에서 평균 급여를 조회하세요.
+SELECT avg(salary) FROM salaries;
+
+-- Q9. salaries 테이블에서 전체 급여 합계를 조회하세요.
+SELECT sum(salary) FROM salaries;
+
+-- Q10. employees 테이블에서 전체 사원 수를 조회하세요.
+SELECT count(*) FROM employees;
+
+-- Q11. employees 테이블에서 성별별 사원 수를 조회하세요.
+SELECT count(*), gender FROM employees GROUP BY gender;
+
+-- Q12. dept_emp 테이블에서 부서별 사원 수를 조회하세요.
+SELECT count(*), dept_no FROM dept_emp GROUP BY dept_no;  
+
+-- Q13. titles 테이블에 직급별 사원 수를 조회하세요.
+SELECT count(*), title FROM titles GROUP BY title;
+
+-- Q14. salaries 테이블에서 사번별 평균 급여를 조회하세요.
+SELECT emp_no, avg(salary) FROM salaries GROUP BY emp_no;   
+
+-- Q15. employees 테이블에서 입사 연도별 사원 수를 조회하세요.
+SELECT count(*), hire_date FROM employees GROUP BY hire_date;
+
+-- Q16. 성별별 사원 수 중 100000명 이상인 경우만 조회하세요.
+SELECT count(*), gender FROM employees GROUP BY gender HAVING count(*) >= 100000;
+
+-- Q17. 부서별 사원 수 중 20000명 이상인 부서만 조회하세요.
+SELECT count(*),dept_no  FROM dept_emp GROUP BY  dept_no HAVING count(*) >= 20000;
+
+-- Q18. 직급별 사원 수 중 50000명 이상인 직급만 조회하세요.
+SELECT  count(*), title FROM titles GROUP BY title HAVING count(*) >= 50000; 
+
+-- Q19. 사번별 평균 급여가 80000 이상인 사원만 조회하세요.
+SELECT avg(salary), emp_no FROM salaries GROUP BY emp_no HAVING avg(salary) >= 80000;
+
+-- Q20. 입사 연도별 사원 수 중 10000명 이상인 연도만 조회하세요.
+SELECT year(hire_date),count(*) FROM employees GROUP BY YEAR(hire_date) HAVING count(*) >= 10000;
+-- 사번, 이름, 연봉 조회
+SELECT e.emp_no, e.first_name, s.salary, s.to_date   FROM employees e JOIN salaries s ON e.emp_no = s.emp_no; -- 사번이 일치하는 애들만 묶기
+SELECT * FROM employees e JOIN salaries s ON e.emp_no = s.emp_no WHERE s.to_date = '9999-01-01'; -- 테이블 전부 보임
+
+-- 사번, 이름, 직무 조회(현재 재직중인)
+SELECT e.emp_no, e.first_name, t.title FROM employees e JOIN titles t ON e.emp_no = t.emp_no WHERE t.to_date = '9999-01-01';
+-- on이 없으면 이름과 직무가 랜덤으로 섞임. 그걸 방지하기 위해 on 사용
+
+-- 사번, 이름, 연봉, 직무
+SELECT e.emp_no, e.first_name, s.salary, t.title FROM employees e 
+JOIN salaries s ON e.emp_no = s.emp_no JOIN titles t ON e.emp_no = t.emp_no;
+
+-- left join은 left 테이블은 전부 출력 오른쪽은 일치하는 것만 출력
+SELECT * FROM departments d LEFT JOIN dept_manager dm ON d.dept_no = dm.dept_no;
+
+SELECT * FROM dept_manager dm RIGHT JOIN departments d ON dm.dept_no = d.dept_no;
+-- 입사일이 1993년 2월 19일 이면서 1962년 10월 24일 직원의 이름을 구하고
+SELECT first_name, last_name FROM employees WHERE hire_date = '1993-02-19' AND birth_date = '1964-10-24'; 
+-- 다시 해당 이름으로 조건을 검색해서 사번(emp_no)를 구해야 하는 경우
+SELECT emp_no FROM employees WHERE first_name = 'Conrado' AND last_name = 'Serra';
+
+-- 서브쿼리 사용
+SELECT emp_no FROM employees 
+WHERE first_name = (SELECT first_name FROM employees WHERE hire_date = '1993-02-19' AND birth_date = '1964-10-24')
+AND last_name = (SELECT last_name FROM employees WHERE hire_date = '1993-02-19' AND birth_date = '1964-10-24');
+
+SELECT emp_no FROM employees WHERE (first_name, last_name) = 
+(SELECT first_name, last_name FROM employees WHERE hire_date ='1993-02-19' AND birth_date = '1964-10-24');
+
+-- 직원중에서 emp_no가 가장 높은 직원 찾기
+SELECT first_name, last_name FROM employees WHERE emp_no = 
+(SELECT max(emp_no) FROM employees);
+
+-- SELECT max(emp_no), first_name, last_name FROM employees GROUP BY first_name, last_name, emp_no ORDER BY emp_no DESC LIMIT 1; -- limit 사용시 order by 반드시 사용
+
+SELECT first_name, last_name
+FROM employees
+ORDER BY emp_no DESC
+LIMIT 1;
+
+-- 입사일이 가장 빠른 사람들
+SELECT first_name, last_name FROM employees WHERE hire_date = 
+(SELECT min(hire_date) FROM employees);
+
+
+-- SELECT first_name, last_name FROM employees WHERE emp_no IN
+-- (SELECT emp_no FROM salaries WHERE salary > (SELECT AVG(salary) FROM salaries));
+-- 전체 평균보다 높은 연봉을 받는 이름 조회
+SELECT first_name, last_name FROM employees WHERE emp_no = 
+(SELECT emp_no FROM salaries s ORDER BY salary DESC LIMIT 1);
+
+-- 평균 사변보다 높은 직원의 이름만 출력
+SELECT first_name, last_name FROM employees WHERE emp_no >=
+(SELECT avg(emp_no) FROM employees);
+
+SELECT * FROM employees e WHERE hire_date > (SELECT avg(hire_date)
+											FROM employees
+											WHERE emp_no = e.emp_no);
+-- 바깥쪽 table employees 'e'를 서브쿼리 안에서 'e.emp_no'로 참조해서 데이터 처리가 매우 느림 <상관 서브쿼리>
+
+SELECT emp_no, salary FROM salaries WHERE salary IN (SELECT salary 
+													 FROM salaries 
+													 ORDER BY salary DESC); -- in을 사용하는건 값을 여러개 가져오기 위해서 사용
+													 
+													 
+													 
+SELECT * FROM salaries s WHERE (emp_no, salary) IN (SELECT emp_no, max(salary)
+													  FROM salaries
+													  GROUP BY emp_no);
+
+SELECT emp_no, title, to_date FROM titles WHERE (emp_no, to_date) IN (SELECT emp_no, max(to_date)
+																		FROM titles
+																		GROUP BY emp_no);
+
+SELECT emp_no, to_date FROM salaries WHERE (emp_no, to_date) IN (SELECT emp_no, max(to_date)
+																		 FROM salaries
+																		 GROUP BY emp_no);
+
+## Q
+SELECT emp_no, dept_no, from_date FROM  dept_emp WHERE (emp_no, from_date) IN (SELECT emp_no, min(from_date)
+																						FROM dept_emp
+																						GROUP BY emp_no);
+-- where의 절 갯수는 서브쿼리의 select 갯수
+
+-- 인라인 뷰
+SELECT * FROM 
+(SELECT de.dept_no, avg(s.salary) FROM dept_emp de JOIN salaries s ON de.emp_no = s.emp_no GROUP BY de.dept_no) a;
+
+SELECT * FROM salaries  ORDER BY salary DESC LIMIT 3; -- salary에서 상위 3개만 가져옴
+-- 
+SELECT emp_no, salary, salary*1.1 AS increment_salary FROM salaries ORDER BY increment_salary DESC LIMIT 3;
+-- from전엔 별칭을 사용해도 인식이 안되지만 인라인 뷰를 사용하면 별칭을 가져다 쓸수도 있다.
+--
+SELECT * FROM (SELECT emp_no, salary, salary*1.1 AS increment_salary FROM salaries 
+			   ORDER BY increment_salary DESC LIMIT 3) a
+			   WHERE a.increment_salary >= 170000; -- 앞에서 from (테이블)로 인라인뷰로 받아왔기 때문에 별칭 사용 가능.
+			   
+
+-- dept_no, 평균 연봉 (salary)을 조회 (인라인뷰)
+-- 메인쿼리에서 평균 연봉이 70000 이상인 부서만 조회
+			   
+SELECT * FROM (SELECT dept_no, avg(salary) AS avg_salary FROM dept_emp de 
+			   JOIN salaries s ON de.emp_no = s.emp_no GROUP BY dept_no) t
+			   WHERE avg_salary <= 70000; 			   
+
+-- Q
+SELECT * FROM (SELECT emp_no, avg(salary) AS avg_salary FROM salaries s
+			   GROUP BY emp_no) a
+			   WHERE a.avg_salary >= 80000;
+CREATE TABLE db_tcl (id varchar(50));
+
+INSERT INTO db_tcl values('test1');
+INSERT INTO db_tcl values('test2');
+INSERT INTO db_tcl values('test3');
+
+SELECT * FROM db_tcl;
+COMMIT;
+
+UPDATE db_tcl SET id = 'test4';
+ROLLBACK; -- 마지막  commit 시점으로 롤백
+--  Q1. 사원의 사번(emp_no)과 급여(salary)를 함께 조회하세요.
+SELECT e.emp_no, s.salary FROM employees e JOIN salaries s ON e.emp_no = s.emp_no;
+
+-- Q2. 사원의 사번(emp_no), 이름(first_name)과 부서 정보(dept_name)를 함께 조회하세요.
+SELECT e.emp_no, e.first_name, d.dept_name FROM employees e 
+JOIN dept_emp de ON de.emp_no  = e.emp_no JOIN departments d  ON de.dept_no = d.dept_no;
+
+-- Q3. 현재 재직 중인 사원의 이름(first_name)과 부서(dept_name)를 조회하세요.
+SELECT e.first_name, d.dept_name FROM employees e
+JOIN dept_emp de ON e.emp_no = de.emp_no JOIN departments d ON de.dept_no = d.dept_no  WHERE to_date = '9999-01-01';
+
+-- Q4. 급여가 80000 이상인 사원의 이름(first_name)과 급여(salary)를 조회하세요. 
+SELECT e.first_name, s.salary FROM employees e JOIN salaries s ON e.emp_no = s.emp_no WHERE salary >= 80000;
+
+-- Q5. 사원의 이름(first_name)과 급여(salary)를 급여가 높은 순으로 조회하세요.
+SELECT first_name, salary FROM employees e JOIN salaries s ON e.emp_no = s.emp_no ORDER BY salary DESC;
+
+-- Q6. 부서 이름(dept_name)과 부서별 사원 수(count)를 조회하세요.
+SELECT d.dept_name, count(dp.emp_no) AS count FROM departments d JOIN dept_emp dp ON d.dept_no = dp.dept_no
+GROUP BY d.dept_name ORDER BY count;
+
+SELECT * FROM employees e 
+JOIN dept_emp de ON e.emp_no = de.dept_no 
+JOIN departments d ON de.dept_no = d.dept_no;
+
+-- Q7. 부서별 사원 수가 20000명 이상인 부서의 이름(dept_name)과 사원수(count)만 조회하세요.
+SELECT d.dept_name, count(dp.emp_no) AS count FROM departments d JOIN dept_emp dp ON d.dept_no = dp.dept_no
+GROUP BY d.dept_name HAVING count(emp_no) >= 20000 ORDER BY count;
+
+-- Q8. 성별이 F인 사원의 이름(first_name)과 부서(dept_name)를 조회하세요.
+SELECT e.first_name, d.dept_name FROM employees e 
+JOIN dept_emp dp ON e.emp_no = dp.emp_no JOIN departments d ON d.dept_no = dp.dept_no 
+WHERE e.gender ='F';
+
+-- Q9. 입사일이 1995년 이후인 사원의 이름(first_name)과 부서(dept_name)를 조회하세요.
+SELECT first_name, dept_name FROM employees e
+JOIN dept_emp dp ON e.emp_no = dp.emp_no JOIN departments d ON d.dept_no = dp.dept_no WHERE e.hire_date >= '1995-01-01'; 
+
+-- Q10. 부서 이름(dept_name)과 부서별 평균 급여(avg_salary)를 조회하세요.
+SELECT d.dept_name, avg(s.salary) AS avg_salary FROM departments d
+JOIN  dept_emp de ON d.dept_no = de.dept_no JOIN salaries s ON de.emp_no = s.emp_no
+GROUP BY d.dept_name ORDER BY avg_salary;
+
+-- Q11. 현재 재직 중인 사원의 이름, 부서, 급여를 급여 내림차순으로 조회하세요.
+SELECT e.first_name, d.dept_name, s.salary FROM employees e
+JOIN salaries s ON e.emp_no = s.emp_no JOIN dept_emp de ON e.emp_no = de.emp_no JOIN departments d ON de.dept_no = d.dept_no 
+WHERE s.to_date = '9999-01-01' AND de.to_date = '9999-01-01' ORDER BY e.first_name, d.dept_name, s.salary DESC;   
+
+-- Q12. 부서별 평균 급여가 70000 이상인 부서만 조회하세요.
+SELECT d.dept_name ,avg(s.salary) AS avg_salary FROM departments d 
+JOIN dept_emp de ON d.dept_no = de.dept_no JOIN salaries s ON de.emp_no = s.emp_no 
+GROUP BY d.dept_name HAVING avg_salary  >= 70000 ORDER BY avg_salary;
+
+-- Q13. 직급별 사원 수를 조회하세요.
+SELECT title, count(emp_no) FROM titles t GROUP BY title;
+ 
+-- Q14. 급여 상위 사원의 이름, 직급, 급여를 조회하세요.
+SELECT e.first_name, t.title, s.salary FROM employees e
+JOIN titles t ON t.emp_no = e.emp_no JOIN salaries s ON s.emp_no = e.emp_no 
+ORDER BY s.salary DESC LIMIT 5;
+
+-- --------------------------------------------------------- LEFT JOIN
+-- Q15. 모든 사원과 부서 정보를 조회하세요 (부서가 없어도 포함).
+-- SELECT e.emp_no, e.first_name, d.dept_name
+-- FROM employees e
+-- LEFT JOIN dept_emp de ON e.emp_no = de.emp_no
+-- LEFT JOIN departments d ON de.dept_no = d.dept_no;
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="java.lang.Class">
+		<list key="findhistory">
+			<item value="join"/>
+			<item value="REFERENCES"/>
+			<item value="pk"/>
+			<item value="auto"/>
+			<item value="fk"/>
+			<item value="update"/>
+			<item value="up"/>
+			<item value="and"/>
+			<item value="like"/>
+			<item value="or"/>
+			<item value="delet"/>
+			<item value="중복"/>
+		</list>
+	</section>
+</section>

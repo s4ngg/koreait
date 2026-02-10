@@ -1,0 +1,52 @@
+CREATE TABLE member_notnull (
+	id varchar(50) NOT NULL,
+	pwd varchar(250) NOT NULL,
+	name varchar(50),
+	age int,
+	in_date datetime
+);
+
+INSERT INTO member_notnull
+VALUES ('test', 'qwer1234', NULL, NULL, now());
+
+INSERT INTO member_notnull(id, pwd, in_date)
+VALUES ('test2','qwer1234',now());
+
+SELECT * FROM member_notnull;
+
+###################################################
+CREATE TABLE member_unique(
+	id varchar(50) NOT NULL UNIQUE,
+	pwd varchar(250) NOT NULL 
+);
+
+INSERT INTO member_unique VALUES ('test','qwer1234');
+INSERT INTO member_unique VALUES ('test','qwer1234');
+
+####################################################
+CREATE TABLE member_check(
+	gender varchar(1) CHECK (gender IN('W','M'))
+);
+
+
+INSERT INTO member_check VALUES('W');
+INSERT INTO member_check VALUES('w');
+INSERT INTO member_check VALUES('asdasd');
+SELECT * FROM member_check;
+#########################################
+CREATE TABLE member_default (
+	id varchar(50),
+	in_data datetime DEFAULT now()
+);
+
+INSERT INTO member_default(id) VALUES('test');
+SELECT * FROM member_default;
+#########################
+CREATE TABLE member_pk(
+	member_pk_id int PRIMARY KEY,
+	id varchar(50)
+);
+-- 중복x + null 금지 2개 합쳐진게 primary key
+INSERT INTO member_pk VALUES (1,'test');
+INSERT INTO member_pk VALUES (1,'test');
+INSERT INTO member_pk VALUES (NULL,'test'); 

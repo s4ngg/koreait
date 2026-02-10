@@ -1,0 +1,67 @@
+--  Q1. 사원의 사번(emp_no)과 급여(salary)를 함께 조회하세요.
+SELECT emp_no, salary FROM salaries;
+
+-- Q2. 사원의 사번(emp_no), 이름(first_name)과 부서 정보(dept_name)를 함께 조회하세요.
+SELECT e.emp_no, e.first_name, d.dept_name FROM employees e 
+JOIN dept_emp de ON de.emp_no  = e.emp_no JOIN departments d  ON de.dept_no = d.dept_no;
+
+-- Q3. 현재 재직 중인 사원의 이름(first_name)과 부서(dept_name)를 조회하세요.
+SELECT e.first_name, d.dept_name FROM employees e
+JOIN dept_emp de ON e.emp_no = de.emp_no JOIN departments d ON de.dept_no = d.dept_no  WHERE to_date = '9999-01-01';
+
+-- Q4. 급여가 80000 이상인 사원의 이름(first_name)과 급여(salary)를 조회하세요. 
+SELECT e.first_name, s.salary FROM employees e JOIN salaries s ON e.emp_no = s.emp_no WHERE salary >= 80000;
+
+-- Q5. 사원의 이름(first_name)과 급여(salary)를 급여가 높은 순으로 조회하세요.
+SELECT first_name, salary FROM employees e JOIN salaries s ON e.emp_no = s.emp_no ORDER BY salary DESC;
+
+-- Q6. 부서 이름(dept_name)과 부서별 사원 수(count)를 조회하세요.
+SELECT d.dept_name, count(dp.emp_no) AS count FROM departments d JOIN dept_emp dp ON d.dept_no = dp.dept_no
+GROUP BY d.dept_name ORDER BY count;
+
+SELECT * FROM employees e 
+JOIN dept_emp de ON e.emp_no = de.dept_no 
+JOIN departments d ON de.dept_no = d.dept_no;
+
+-- Q7. 부서별 사원 수가 20000명 이상인 부서의 이름(dept_name)과 사원수(count)만 조회하세요.
+SELECT d.dept_name, count(dp.emp_no) AS count FROM departments d JOIN dept_emp dp ON d.dept_no = dp.dept_no
+GROUP BY d.dept_name HAVING count(emp_no) >= 20000 ORDER BY count;
+
+-- Q8. 성별이 F인 사원의 이름(first_name)과 부서(dept_name)를 조회하세요.
+SELECT e.first_name, d.dept_name FROM employees e 
+JOIN dept_emp dp ON e.emp_no = dp.emp_no JOIN departments d ON d.dept_no = dp.dept_no 
+WHERE e.gender ='F';
+
+-- Q9. 입사일이 1995년 이후인 사원의 이름(first_name)과 부서(dept_name)를 조회하세요.
+SELECT first_name, dept_name FROM employees e
+JOIN dept_emp dp ON e.emp_no = dp.emp_no JOIN departments d ON d.dept_no = dp.dept_no WHERE e.hire_date >= '1995-01-01'; 
+
+-- Q10. 부서 이름(dept_name)과 부서별 평균 급여(avg_salary)를 조회하세요.
+SELECT d.dept_name, avg(s.salary) AS avg_salary FROM departments d
+JOIN  dept_emp de ON d.dept_no = de.dept_no JOIN salaries s ON de.emp_no = s.emp_no
+GROUP BY d.dept_name ORDER BY avg_salary;
+
+-- Q11. 현재 재직 중인 사원의 이름, 부서, 급여를 급여 내림차순으로 조회하세요.
+SELECT e.first_name, d.dept_name, s.salary FROM employees e
+JOIN salaries s ON e.emp_no = s.emp_no JOIN dept_emp de ON e.emp_no = de.emp_no JOIN departments d ON de.dept_no = d.dept_no 
+WHERE s.to_date = '9999-01-01' AND de.to_date = '9999-01-01' ORDER BY e.first_name, d.dept_name, s.salary DESC;   
+
+-- Q12. 부서별 평균 급여가 70000 이상인 부서만 조회하세요.
+SELECT d.dept_name ,avg(s.salary) AS avg_salary FROM departments d 
+JOIN dept_emp de ON d.dept_no = de.dept_no JOIN salaries s ON de.emp_no = s.emp_no 
+GROUP BY d.dept_name HAVING avg_salary  >= 70000 ORDER BY avg_salary;
+
+-- Q13. 직급별 사원 수를 조회하세요.
+SELECT title, count(emp_no) FROM titles t GROUP BY title;
+ 
+-- Q14. 급여 상위 사원의 이름, 직급, 급여를 조회하세요.
+SELECT e.first_name, t.title, s.salary FROM employees e
+JOIN titles t ON t.emp_no = e.emp_no JOIN salaries s ON s.emp_no = e.emp_no 
+ORDER BY s.salary DESC LIMIT 5;
+
+-- --------------------------------------------------------- LEFT JOIN
+-- Q15. 모든 사원과 부서 정보를 조회하세요 (부서가 없어도 포함).
+-- SELECT e.emp_no, e.first_name, d.dept_name
+-- FROM employees e
+-- LEFT JOIN dept_emp de ON e.emp_no = de.emp_no
+-- LEFT JOIN departments d ON de.dept_no = d.dept_no;

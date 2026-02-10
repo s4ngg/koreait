@@ -1,0 +1,19 @@
+SELECT * FROM employees ORDER BY birth_date; -- order by : 오름차순 정렬
+SELECT * FROM employees ORDER BY birth_date DESC; -- order by 00 DESC : 내림차순 정렬
+SELECT * FROM employees ORDER BY birth_date ASC; -- order by 00 ASC : 오름차순 정렬인데 기본값이 오름차순이라 ASC 스킵해도 됨.
+SELECT * FROM titles ORDER BY to_date DESC;
+
+-- 그룹 함수
+-- max, min, avg, sum 기능 // count : 조회된 컬럼의 개수 확인, 보통 *로 확인
+SELECT max(salary) FROM salaries s;  
+SELECT min(salary) FROM salaries s; 
+SELECT avg(salary) FROM salaries s; 
+SELECT sum(salary) FROM salaries s; 
+SELECT count(*) FROM salaries s;
+
+SELECT count(*) AS '직원 수 ' FROM employees;
+
+-- Q1. 실습
+SELECT count(title = 'Enginner') AS '직원 수' FROM titles;
+SELECT count(*) FROM employees WHERE hire_date > '1965-01-01';
+SELECT min(emp_no), max(emp_no) FROM employees;
