@@ -9,28 +9,7 @@
 <body>
 
   <!-- ===== Header ===== -->
-  <header class="header">
-    <div class="header-inner">
-      <a href="home.html" class="logo">
-        <span class="logo-icon">L</span>
-        학습게시판
-      </a>
-
-      <button class="menu-toggle" onclick="toggleMenu()" aria-label="메뉴 열기">
-        <span></span><span></span><span></span>
-      </button>
-
-      <nav class="nav">
-        <a href="home.html" class="active">홈</a>
-        <a href="board.html">게시판</a>
-        <a href="profile.html">내 정보</a>
-        <div class="nav-auth">
-          <a href="/member/login/form" class="btn btn-ghost btn-sm">로그인</a>
-          <a href="/member/register/form" class="btn btn-primary btn-sm">회원가입</a>
-        </div>
-      </nav>
-    </div>
-  </header>
+    <header th:replace="~{fragments/header :: global_header}"></header>
 
   <!-- ===== Main ===== -->
   <main class="main">

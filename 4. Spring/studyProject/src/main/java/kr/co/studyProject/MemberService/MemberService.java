@@ -6,6 +6,6 @@ import kr.co.studyProject.dto.ResLoginDTO;
 
 public interface MemberService {
 	void register(ReqRegisterDTO request);
-	
+
 	ResLoginDTO login(ReqLoginDTO request);
 }

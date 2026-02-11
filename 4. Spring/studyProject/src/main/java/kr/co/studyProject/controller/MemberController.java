@@ -25,9 +25,11 @@ public class MemberController {
 	public String registerForm() {
 		return "/signup";
 	}
+	
 	@PostMapping("/register")
 	public String register(ReqRegisterDTO request) {
 		memberService.register(request);
+		System.out.println("postmap");
 		return "redirect:/member/login/form";
 	}
 	

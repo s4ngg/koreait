@@ -25,8 +25,8 @@
         <a href="board.html">게시판</a>
         <a href="profile.html">내 정보</a>
         <div class="nav-auth">
-          <a href="login.html" class="btn btn-ghost btn-sm active">로그인</a>
-          <a href="signup.html" class="btn btn-primary btn-sm">회원가입</a>
+          <a href="/member/login/form" class="btn btn-ghost btn-sm active">로그인</a>
+          <a href="/member/register/form" class="btn btn-primary btn-sm">회원가입</a>
         </div>
       </nav>
     </div>
@@ -42,12 +42,13 @@
       </div>
 
       <!-- 로그인 폼 -->
-      <form onsubmit="handleFormSubmit(event, '로그인 성공! (학습용 알림)', 'board.html')">
+      <form action="/member/login" method = "POST">
 
         <div class="form-group">
           <label for="email">이메일</label>
           <input
             type="email"
+            name = "email"
             id="email"
             class="form-input"
             placeholder="example@email.com"
@@ -60,6 +61,7 @@
           <label for="password">비밀번호</label>
           <input
             type="password"
+            name = "password"
             id="password"
             class="form-input"
             placeholder="비밀번호를 입력하세요"
@@ -94,7 +96,7 @@
       </button>
 
       <div class="card-footer">
-        계정이 없으신가요? <a href="signup.html">회원가입</a>
+        계정이 없으신가요? <a href="/member/register/form">회원가입</a>
       </div>
     </div>
 

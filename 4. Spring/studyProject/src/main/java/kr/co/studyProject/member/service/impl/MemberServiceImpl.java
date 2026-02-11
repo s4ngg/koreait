@@ -22,30 +22,34 @@ public class MemberServiceImpl implements MemberService {
 		// 비밀번호 확인,검증
 		if(!request.getPassword().equals(request.getPassword())) {
 			System.out.println("비밀번호가 일치하지 않습니다.");
-		}
-		// 아이디 중복 체크
-		if (memberRepository.existsByUserId(request.getUserId())) {
-			System.out.println("이미 사용중인 아이디 입니다.");
+			return ;
 		}
 		// 이메일 중복 체크
 		if(memberRepository.existsByEmail(request.getEmail())) {
 			System.out.println("이미 사용중인 이메일 입니다.");
+			return ;
 		}
 		// 비밀번호 암호화
 		String encodedPassword = passwordEncoder.encode(request.getPassword());
 		
-		Member member = new Member();
-		member.setUserId(request.getUserId());
-		member.setUserName(request.getUserName());
-		member.setEmail(request.getEmail());
-		member.setPassword(encodedPassword);
+		// 빌더
+		Member member = Member.builder()
+						.userId(request.getUserId())
+						.userName(request.getUserName())
+						.email(request.getEmail())
+						.password(encodedPassword)
+						.build();
+//		Member member = new Member();
+//		member.setUserId(request.getUserId());
+//		member.setUserName(request.getUserName());
+//		member.setEmail(request.getEmail());
+//		member.setPassword(encodedPassword);
 		
 		memberRepository.save(member);
 	}
-
 	@Override
 	public ResLoginDTO login(ReqLoginDTO request) {
-		Member member = memberRepository.findByUserId(request.getUserId());
+		Member member = memberRepository.findByEmail(request.getEmail());
 		
 		if(member == null) {
 			return null;
@@ -57,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
 		ResLoginDTO response = new ResLoginDTO();
 		response.setId(member.getId());
 		response.setUserId(member.getUserId());
-		response.setUserName(member.getUserName());
+		response.setUserId(member.getUserName());
 		response.setCreatedAt(member.getCreatedAt());
 		response.setUpdatedAt(member.getUpdatedAt());
 		

@@ -1,21 +1,26 @@
- <header th:fragment="global_header"> 
-        <nav>
-            <div class="logo">Spring Hub</div>
-            <ul class="nav-center">
-                <li><a href="index.html" class="nav-link active">홈</a></li>
-                <li><a href="announcements.html" class="nav-link">공지사항</a></li>
-                <li><a href="board.html" class="nav-link">자유게시판</a></li>
-                <li th:if="${session.LOGIN_USER != null}">
-                <a href="profile.html" class="nav-link">회원정보</a></li>
-            </ul>
-            <div class="nav-right" th:if="${session.LOGIN_USER == null}">
-                <a href="/member/login/form" class="btn btn-secondary">로그인</a>
-                <a href="/member/register/form" class="btn btn-primary"
-                 style="text-decoration: none; display: inline-block;">회원가입</a>
-            </div>
-            
-            <div class="nav-right" th:if="${session.LOGIN_USER != null}">
+<header class="header" th:fragment="global_header">
+    <div class="header-inner">
+      <a href="home.html" class="logo">
+        <span class="logo-icon">L</span>
+        학습게시판
+      </a>
+
+      <button class="menu-toggle" onclick="toggleMenu()" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav">
+        <a href="home.html">홈</a>
+        <a href="board.html">게시판</a>
+        <a href="profile.html">내 정보</a>
+        <a th:if="${session.LOGIN_USER != null}"></a>
+        <div class="nav-auth" th:if="${session.LOGIN_USER == null}">
+          <a href="/member/login/form" class="btn btn-ghost btn-sm active">로그인</a>
+          <a href="/member/register/form" class="btn btn-primary btn-sm">회원가입</a>
+        </div>
+        <div class="nav-right" th:if="${session.LOGIN_USER != null}">
                 <a href="/member/logout" class="btn btn-secondary">로그아웃</a>
             </div>
-        </nav>
-    </header>
+      </nav>
+    </div>
+  </header>

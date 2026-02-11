@@ -25,8 +25,8 @@
         <a href="board.html">게시판</a>
         <a href="profile.html">내 정보</a>
         <div class="nav-auth">
-          <a href="login.html" class="btn btn-ghost btn-sm">로그인</a>
-          <a href="signup.html" class="btn btn-primary btn-sm active">회원가입</a>
+          <a href="/member/login/form" class="btn btn-ghost btn-sm">로그인</a>
+          <a href="/member/register/form" class="btn btn-primary btn-sm active">회원가입</a>
         </div>
       </nav>
     </div>
@@ -42,12 +42,13 @@
       </div>
 
       <!-- 회원가입 폼 -->
-      <form onsubmit="handleFormSubmit(event, '회원가입이 완료되었습니다! (학습용 알림)', 'login.html')">
+      <form action="/member/register" method="POST">
 
         <div class="form-group">
           <label for="name">이름</label>
           <input
             type="text"
+			name="userName"
             id="name"
             class="form-input"
             placeholder="홍길동"
@@ -60,6 +61,7 @@
           <label for="email">이메일</label>
           <input
             type="email"
+            name = "email"
             id="email"
             class="form-input"
             placeholder="example@email.com"
@@ -73,6 +75,7 @@
           <label for="nickname">닉네임</label>
           <input
             type="text"
+            name ="userId"
             id="nickname"
             class="form-input"
             placeholder="사용할 닉네임을 입력하세요"
@@ -85,6 +88,7 @@
           <label for="password">비밀번호</label>
           <input
             type="password"
+            name="password"
             id="password"
             class="form-input"
             placeholder="8자 이상 입력하세요"
@@ -98,6 +102,7 @@
           <label for="passwordConfirm">비밀번호 확인</label>
           <input
             type="password"
+            name = "passwordConfirm"
             id="passwordConfirm"
             class="form-input"
             placeholder="비밀번호를 다시 입력하세요"
@@ -111,6 +116,7 @@
           <label for="phone">전화번호 (선택)</label>
           <input
             type="tel"
+            name="phone"
             id="phone"
             class="form-input"
             placeholder="010-1234-5678"
@@ -129,7 +135,7 @@
       </form>
 
       <div class="card-footer">
-        이미 계정이 있으신가요? <a href="login.html">로그인</a>
+        이미 계정이 있으신가요? <a href="/member/login/form">로그인</a>
       </div>
     </div>
 
