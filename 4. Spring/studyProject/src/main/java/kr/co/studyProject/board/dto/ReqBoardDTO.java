@@ -1,23 +1,21 @@
-package kr.co.study.board.dto;
-
-import java.time.LocalDateTime;
+package kr.co.studyProject.board.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder
-public class ResBoardDTO {
-	private Long id;
+public class ReqBoardDTO {
+	private String boardType;
 	private String category;
 	private String title;
 	private String content;
-	private String writerName;
-	private LocalDateTime createdAt;
-	private int viewCount;
-	
 }

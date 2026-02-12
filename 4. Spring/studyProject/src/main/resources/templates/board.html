@@ -9,9 +9,9 @@
 <body>
 
   <!-- ===== Header ===== -->
-  <header class="header">
+  <header th:replace="~{fragments/header :: global_header}"></header>
     <div class="header-inner">
-      <a href="home.html" class="logo">
+      <a href="/board" class="logo">
         <span class="logo-icon">L</span>
         학습게시판
       </a>
@@ -21,12 +21,12 @@
       </button>
 
       <nav class="nav">
-        <a href="home.html">홈</a>
-        <a href="board.html" class="active">게시판</a>
+        <a href="/">홈</a>
+        <a href="/board" class="active">게시판</a>
         <a href="profile.html">내 정보</a>
         <div class="nav-auth">
-          <a href="login.html" class="btn btn-ghost btn-sm">로그인</a>
-          <a href="signup.html" class="btn btn-primary btn-sm">회원가입</a>
+          <a href="/member/login/form" class="btn btn-ghost btn-sm">로그인</a>
+          <a href="/member/register/form" class="btn btn-primary btn-sm">회원가입</a>
         </div>
       </nav>
     </div>
@@ -49,8 +49,8 @@
 
     <!-- Board Top Bar -->
     <div class="board-topbar">
-      <span class="info">총 <strong>8</strong>개의 게시글</span>
-      <a href="board-write.html" class="btn btn-primary btn-sm">
+      <span class="info">총 <strong th:text="${list.totalElements}"></strong>개의 게시글</span>
+      <a href="/board/create/form" class="btn btn-primary btn-sm" th:if="${session.LOGIN_USER != null}">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         새 글 작성
       </a>
@@ -69,92 +69,46 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="col-no">8</td>
+          <tr th:each="board : ${list}"
+          th:onclick="|location.href='/board/detail?id=' + ${board.id}|">
+            <td class="col-no" th:text="${board.id}"></td>
             <td class="col-title">
-              <a href="board-view.html">CSS Flexbox와 Grid의 차이점 정리</a>
-              <span class="badge badge-primary" style="margin-left: 0.5rem;">NEW</span>
+              <a th:href="@{/board/detail(id=${board.id})}" th:text="${board.title}">게시판에 오신 것을 환영합니다!</a>
+              <span class="badge badge-success" 
+              th:if="${board.category != null}" 
+              th:text="${board.category}"></span>
             </td>
-            <td class="col-author">김개발</td>
-            <td class="col-date">2026-02-10</td>
-            <td class="col-views">42</td>
-          </tr>
-          <tr>
-            <td class="col-no">7</td>
-            <td class="col-title">
-              <a href="board-view.html">JavaScript 기초 - 변수와 자료형</a>
-            </td>
-            <td class="col-author">이학생</td>
-            <td class="col-date">2026-02-09</td>
-            <td class="col-views">128</td>
-          </tr>
-          <tr>
-            <td class="col-no">6</td>
-            <td class="col-title">
-              <a href="board-view.html">HTML 시맨틱 태그 활용법</a>
-            </td>
-            <td class="col-author">박코딩</td>
-            <td class="col-date">2026-02-08</td>
-            <td class="col-views">95</td>
-          </tr>
-          <tr>
-            <td class="col-no">5</td>
-            <td class="col-title">
-              <a href="board-view.html">반응형 웹 디자인 미디어 쿼리 예제</a>
-            </td>
-            <td class="col-author">최프론트</td>
-            <td class="col-date">2026-02-07</td>
-            <td class="col-views">203</td>
-          </tr>
-          <tr>
-            <td class="col-no">4</td>
-            <td class="col-title">
-              <a href="board-view.html">CSS 애니메이션과 트랜지션 비교</a>
-            </td>
-            <td class="col-author">김개발</td>
-            <td class="col-date">2026-02-05</td>
-            <td class="col-views">87</td>
-          </tr>
-          <tr>
-            <td class="col-no">3</td>
-            <td class="col-title">
-              <a href="board-view.html">웹 접근성(a11y) 기본 가이드</a>
-            </td>
-            <td class="col-author">정디자인</td>
-            <td class="col-date">2026-02-03</td>
-            <td class="col-views">156</td>
-          </tr>
-          <tr>
-            <td class="col-no">2</td>
-            <td class="col-title">
-              <a href="board-view.html">DOM 조작 기본 메서드 정리</a>
-            </td>
-            <td class="col-author">이학생</td>
-            <td class="col-date">2026-02-01</td>
-            <td class="col-views">312</td>
-          </tr>
-          <tr>
-            <td class="col-no">1</td>
-            <td class="col-title">
-              <a href="board-view.html">게시판에 오신 것을 환영합니다!</a>
-              <span class="badge badge-success">공지</span>
-            </td>
-            <td class="col-author">관리자</td>
-            <td class="col-date">2026-01-30</td>
-            <td class="col-views">524</td>
+            <td class="col-author" th:text="${board.writerName}"></td>
+            <td class="col-date" th:text="${#temporals.format(board.createdAt, 'yyyy.MM.dd')}"></td>
+            <td class="col-views" th:text="${board.viewCount}"></td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <!-- Pagination -->
-    <nav class="pagination" aria-label="페이지 이동">
-      <a href="#" class="disabled" aria-label="이전 페이지">&laquo;</a>
-      <span class="active">1</span>
-      <a href="#">2</a>
-      <a href="#">3</a>
-      <a href="#" aria-label="다음 페이지">&raquo;</a>
-    </nav>
+<nav class="pagination" aria-label="페이지 이동">
+  <!-- 이전 페이지 -->
+  <a th:href="@{/board(page=${currentPage - 1})}" 
+     th:class="${currentPage == 1} ? 'disabled' : ''" 
+     aria-label="이전 페이지">&laquo;</a>
+  
+  <!-- 페이지 번호 -->
+  <th:block th:each="i : ${#numbers.sequence(startPage, endPage)}">
+    <span th:if="${i == currentPage}" 
+          class="active" 
+          th:text="${i}"></span>
+    
+    <a th:if="${i != currentPage}" 
+       th:href="@{/board(page=${i})}" 
+       th:text="${i}"></a>
+  </th:block>
+  
+  <!-- 다음 페이지 -->
+  <a th:href="@{/board(page=${currentPage + 1})}" 
+     th:class="${currentPage >= totalPages} ? 'disabled' : ''" 
+     aria-label="다음 페이지">&raquo;</a>
+</nav>
 
   </main>
 

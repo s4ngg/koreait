@@ -1,6 +1,6 @@
 <header class="header" th:fragment="global_header">
     <div class="header-inner">
-      <a href="home.html" class="logo">
+      <a href="/" class="logo">
         <span class="logo-icon">L</span>
         학습게시판
       </a>
@@ -10,8 +10,8 @@
       </button>
 
       <nav class="nav">
-        <a href="home.html">홈</a>
-        <a href="board.html">게시판</a>
+        <a href="/">홈</a>
+        <a href="/board">게시판</a>
         <a href="profile.html">내 정보</a>
         <a th:if="${session.LOGIN_USER != null}"></a>
         <div class="nav-auth" th:if="${session.LOGIN_USER == null}">

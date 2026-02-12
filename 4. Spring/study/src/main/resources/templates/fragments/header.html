@@ -1,8 +1,8 @@
  <header th:fragment="global_header"> 
         <nav>
-            <div class="logo">Spring Hub</div>
+            <div class="logo"> <a href="/" style="text-decoration: none; color: inherit;">Spring Hub</div>
             <ul class="nav-center">
-                <li><a href="/" class="nav-link active">홈</a></li>
+                <li><a href="/" class="nav-link">홈</a></li>
                 <li><a href="/board/notice" class="nav-link">공지사항</a></li>
                 <li><a href="board.html" class="nav-link">자유게시판</a></li>
                 <li th:if="${session.LOGIN_USER != null}">

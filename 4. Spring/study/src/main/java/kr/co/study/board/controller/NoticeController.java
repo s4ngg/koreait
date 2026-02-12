@@ -1,12 +1,12 @@
 package kr.co.study.board.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 import kr.co.study.board.dto.ReqBoardDTO;
@@ -25,15 +25,54 @@ public class NoticeController {
 	 * @return notice.html
 	 */
 	@GetMapping
-	public String noticeList(Model model) {
+	public String noticeList(@RequestParam(name="page", defaultValue = "1") int page,
+							 Model model) {
 		
 		// 1. 공지사항 목록 조회
-		List<ResBoardDTO> list = boardService.getBoardList();
+		Page<ResBoardDTO> list = boardService.getBoardList(page - 1);
+		
+		// 페이징 버튼 블록 계산
+		// - 현재 페이지가 3페이지다 -> 1~5페이지 보이게
+		// - 현재 페이지가 7페이지다 -> 6~10페이지 보이게
+		int currentPage = list.getNumber() + 1; // 현재 페이지 (JPA는 0부터 시작함으로 + 1)
+		int totalPages = list.getTotalPages();
+		
+		int blockSize = 5; // 5개의 버튼씩 보이게
+		
+		int startPage = ((currentPage - 1) / blockSize) * blockSize + 1;
+		
+		int endPage = startPage + blockSize - 1;
+		
+		if(endPage > totalPages) {
+			endPage = totalPages;
+		}
 		// 2. 모델에 담아 타임리프에 전달
 		model.addAttribute("list", list);
+		model.addAttribute("currentPage",currentPage);
+		model.addAttribute("totalPages",totalPages);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		
+		
 		// 3. 타임리프로 이동
 		return "pages/board/notice";
 	}
+	
+	/**
+	 * 공지사항의 게시글 상세보기 페이지로 이동될 때 사용하는 메서드 입니다.
+	 * - 쿼리스트링으로 전달 받은 id(게시글의 PK)로 조회 한다.
+	 * - 조회된 게시글의 정보를 모델에 담아 타임리프에서 사용한다.
+	 * @param id 게시글의 PK
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/detail")
+	public String detail(@RequestParam(name="id") Long id,Model model) {
+		ResBoardDTO response = boardService.getBoardDetail(id);
+		model.addAttribute("notice",response);
+		return "pages/board/notice-detail";
+	}
+	
 	
 	@GetMapping("/create/form")
 	public String createForm() {

@@ -1,6 +1,6 @@
 package kr.co.study.board.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 import kr.co.study.board.dto.ReqBoardDTO;
 import kr.co.study.board.dto.ResBoardDTO;
@@ -31,6 +31,16 @@ public interface BoardService {
 	 * - 조회된 Board 엔티티를 Response DTO 타입으로 변환
 	 * @return List<ResBoardDTO>
 	 */
-	List<ResBoardDTO> getBoardList();
+	Page<ResBoardDTO> getBoardList(int page);
+
+	
+	/**
+	 * 게시글 상세보기 조회
+	 * - PK를 기준으로 조건 검색
+	 * - PK로 조건을 주므로 조회 결과는 무조건 1개의 게시글
+	 * @param id 게시글의 PK
+	 * @return 
+	 */
+	ResBoardDTO getBoardDetail(Long id);
 	
 }

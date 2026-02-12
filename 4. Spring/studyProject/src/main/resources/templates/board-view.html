@@ -9,28 +9,8 @@
 <body>
 
   <!-- ===== Header ===== -->
-  <header class="header">
-    <div class="header-inner">
-      <a href="home.html" class="logo">
-        <span class="logo-icon">L</span>
-        학습게시판
-      </a>
+  <  <header th:replace="~{fragments/header :: global_header}"></header>
 
-      <button class="menu-toggle" onclick="toggleMenu()" aria-label="메뉴 열기">
-        <span></span><span></span><span></span>
-      </button>
-
-      <nav class="nav">
-        <a href="home.html">홈</a>
-        <a href="board.html" class="active">게시판</a>
-        <a href="profile.html">내 정보</a>
-        <div class="nav-auth">
-          <a href="login.html" class="btn btn-ghost btn-sm">로그인</a>
-          <a href="signup.html" class="btn btn-primary btn-sm">회원가입</a>
-        </div>
-      </nav>
-    </div>
-  </header>
 
   <!-- ===== Main ===== -->
   <main class="main main--medium">
@@ -100,7 +80,7 @@
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
           목록으로
         </a>
-        <div class="btn-group">
+        <div class="btn-group" th:if="${session.LOGIN_USER != null and session.LOGIN_USER.userName == board.writerName}">
           <a href="board-edit.html" class="btn btn-secondary btn-sm">수정</a>
           <button type="button" class="btn btn-danger btn-sm" onclick="showDeleteModal()">삭제</button>
         </div>
